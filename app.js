@@ -56,6 +56,7 @@ let supabaseRefreshPromise = null;
 let supabaseRefreshAgain = false;
 let supabaseMutationQueue = Promise.resolve();
 let preferenceSyncTimer = null;
+let savePickerAnimeId = null;
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -188,6 +189,30 @@ function queueSupabaseMutation(operation) {
   return result;
 }
 
+function captureGroupComposerState() {
+  const input = $('[data-group-message-form] input[name="message"]');
+  if (!input) return null;
+  return {
+    groupId: activeGroupId,
+    draft: input.value,
+    focused: document.activeElement === input,
+    selectionStart: input.selectionStart,
+    selectionEnd: input.selectionEnd
+  };
+}
+
+function restoreGroupComposerState(state) {
+  if (!state || state.groupId !== activeGroupId) return;
+  const input = $('[data-group-message-form] input[name="message"]');
+  if (!input) return;
+  input.value = state.draft;
+  if (!state.focused) return;
+  input.focus({ preventScroll: true });
+  if (Number.isInteger(state.selectionStart) && Number.isInteger(state.selectionEnd)) {
+    input.setSelectionRange(state.selectionStart, state.selectionEnd);
+  }
+}
+
 async function refreshSupabaseStore() {
   if (!supabaseMode || !window.SoraListSupabase.session) return;
   if (supabaseRefreshPromise) {
@@ -201,6 +226,7 @@ async function refreshSupabaseStore() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
     applyTheme();
     renderAll();
+    if (savePickerAnimeId && !$("#saveAnimeModal").hidden) renderAnimeSavePicker();
     if (detailAnimeId && !$("#detailModal").hidden) showDetails(detailAnimeId);
   })();
   try {
@@ -1144,8 +1170,8 @@ function recordGroupActivity(group, user, text) {
   group.updatedAt = new Date().toISOString();
 }
 
-function addAnimeToGroup(animeId) {
-  const group = activeGroup();
+function addAnimeToGroup(animeId, groupId) {
+  const group = groupId ? groupsForUser().find((item) => item.id === groupId) : activeGroup();
   const user = currentUser();
   const anime = findAnime(animeId);
   if (!group || !user || !anime) return false;
@@ -1153,6 +1179,7 @@ function addAnimeToGroup(animeId) {
     queueSupabaseMutation(async () => {
       await window.SoraListSupabase.setGroupAnimeInterest(group.id, animeId, anime, true);
       await refreshSupabaseStore();
+      if (typeof savePickerAnimeId !== "undefined" && savePickerAnimeId) renderAnimeSavePicker();
       toast(`${anime.title} added to ${group.name}`);
     });
     return true;
@@ -1168,12 +1195,13 @@ function addAnimeToGroup(animeId) {
   recordGroupActivity(group, user, `${entry.addedBy.length > 1 ? "also wants to watch" : "added"} ${anime.title}.`);
   saveStore();
   renderAll();
+  if (typeof savePickerAnimeId !== "undefined" && savePickerAnimeId) renderAnimeSavePicker();
   toast(`${anime.title} added to ${group.name}`);
   return true;
 }
 
-function toggleGroupAnimeInterest(animeId) {
-  const group = activeGroup();
+function toggleGroupAnimeInterest(animeId, groupId) {
+  const group = groupId ? groupsForUser().find((item) => item.id === groupId) : activeGroup();
   const user = currentUser();
   if (!group || !user) return;
   const entry = (group.animeEntries || []).find((item) => Number(item.animeId) === Number(animeId));
@@ -1183,16 +1211,18 @@ function toggleGroupAnimeInterest(animeId) {
     queueSupabaseMutation(async () => {
       await window.SoraListSupabase.setGroupAnimeInterest(group.id, animeId, anime, !isInterested);
       await refreshSupabaseStore();
+      if (typeof savePickerAnimeId !== "undefined" && savePickerAnimeId) renderAnimeSavePicker();
     });
     return;
   }
-  if (!entry || !(entry.addedBy || []).includes(user.usernameLower)) { addAnimeToGroup(animeId); return; }
+  if (!entry || !(entry.addedBy || []).includes(user.usernameLower)) { addAnimeToGroup(animeId, groupId); return; }
   entry.addedBy = entry.addedBy.filter((name) => name !== user.usernameLower);
   const anime = findAnime(animeId) || entry.snapshot;
   if (!entry.addedBy.length) group.animeEntries = group.animeEntries.filter((item) => item !== entry);
   recordGroupActivity(group, user, `removed ${anime.title} from their picks.`);
   saveStore();
   renderAll();
+  if (typeof savePickerAnimeId !== "undefined" && savePickerAnimeId) renderAnimeSavePicker();
 }
 
 async function sendGroupMessage(form) {
@@ -1214,6 +1244,7 @@ async function sendGroupMessage(form) {
   group.messages ||= [];
   group.messages.push({ id: `message-${Date.now()}-${Math.random().toString(16).slice(2)}`, authorUsernameLower: user.usernameLower, text: message.slice(0, 500), system: false, createdAt: new Date().toISOString() });
   group.updatedAt = new Date().toISOString();
+  form.reset();
   saveStore();
   renderAll();
   return true;
@@ -1751,6 +1782,7 @@ async function unlinkOAuthProvider(provider) {
 }
 
 function renderAll() {
+  const composerState = captureGroupComposerState();
   renderSyncStatus();
   renderAuthState();
   renderProfilePage();
@@ -1762,6 +1794,7 @@ function renderAll() {
   renderFriends();
   renderGroups();
   renderUpcoming();
+  restoreGroupComposerState(composerState);
 }
 
 async function fetchDiscoverAnime() {
@@ -2264,7 +2297,11 @@ function openModal(id) {
   $("#" + id).hidden = false;
   document.body.style.overflow = "hidden";
 }
-function closeModal(id) { $("#" + id).hidden = true; document.body.style.overflow = ""; }
+function closeModal(id) {
+  $("#" + id).hidden = true;
+  if (id === "saveAnimeModal") savePickerAnimeId = null;
+  document.body.style.overflow = $$(".modal-backdrop").some((modal) => !modal.hidden) ? "hidden" : "";
+}
 function requireAuth() { if (!currentUser()) { openModal("authModal"); return false; } return true; }
 
 function closeProfileDropdown() {
@@ -2305,8 +2342,63 @@ async function signOutCurrentUser() {
   toast(`${name} signed out`);
 }
 
+function renderAnimeSavePicker() {
+  const content = $("#saveAnimeContent");
+  const anime = findAnime(savePickerAnimeId);
+  const user = currentUser();
+  if (!content || !anime || !user) return;
+  const groups = groupsForUser(user);
+  const inPersonalList = (user.list || []).some((entry) => Number(entry.animeId) === Number(anime.id));
+  const destinationButton = ({ label, detail, active, attributes, avatarMarkup = "" }) => `
+    <button type="button" class="save-destination-button ${active ? "active" : ""}" ${attributes} aria-pressed="${active}">
+      <span class="save-destination-icon">${avatarMarkup || "<span>MY</span>"}</span>
+      <span class="save-destination-copy"><strong>${escapeHtml(label)}</strong><small>${escapeHtml(detail)}</small></span>
+      <span class="save-destination-check" aria-hidden="true">${active ? "✓" : "+"}</span>
+    </button>`;
+  content.innerHTML = `
+    <div class="save-picker-heading">
+      <img src="${escapeHtml(anime.image)}" alt="">
+      <div><p class="eyebrow">SAVE TO LISTS</p><h2 id="saveAnimeTitle">${escapeHtml(anime.title)}</h2><p>Select one or more destinations. Changes save immediately.</p></div>
+    </div>
+    <div class="save-destination-list">
+      ${destinationButton({ label: "My List", detail: inPersonalList ? "Saved to your personal list" : "Your private anime list", active: inPersonalList, attributes: `data-save-personal="${anime.id}"` })}
+      ${groups.map((group) => {
+        const entry = (group.animeEntries || []).find((item) => Number(item.animeId) === Number(anime.id));
+        const active = Boolean(entry?.addedBy?.includes(user.usernameLower));
+        const members = groupMembers(group);
+        return destinationButton({
+          label: group.name,
+          detail: `${members.length} ${members.length === 1 ? "member" : "members"} · Group list`,
+          active,
+          attributes: `data-save-group="${escapeHtml(group.id)}" data-anime-id="${anime.id}"`,
+          avatarMarkup: escapeHtml(initials(group.name))
+        });
+      }).join("")}
+    </div>
+    <button type="button" class="primary-button full save-picker-done" data-close-modal="saveAnimeModal">Done</button>`;
+}
+
+function openAnimeSavePicker(animeId) {
+  if (!requireAuth()) return;
+  savePickerAnimeId = Number(animeId);
+  renderAnimeSavePicker();
+  openModal("saveAnimeModal");
+}
+
+function togglePersonalListDestination(animeId) {
+  const isAdded = getUserList().some((entry) => Number(entry.animeId) === Number(animeId));
+  if (isAdded) removeFromList(animeId);
+  else addToList(animeId);
+  renderAnimeSavePicker();
+  if (detailAnimeId === animeId && !$("#detailModal").hidden) showDetails(animeId);
+}
+
 function toggleAnimeInList(animeId) {
   if (!requireAuth()) return;
+  if (groupsForUser().length) {
+    openAnimeSavePicker(animeId);
+    return;
+  }
   const isAdded = getUserList().some((entry) => Number(entry.animeId) === Number(animeId));
   if (isAdded) removeFromList(animeId);
   else addToList(animeId);
@@ -2563,6 +2655,10 @@ function toast(message) {
 
 function setupEvents() {
   document.addEventListener("click", (event) => {
+    const savePersonal = event.target.closest("[data-save-personal]");
+    if (savePersonal) { togglePersonalListDestination(Number(savePersonal.dataset.savePersonal)); return; }
+    const saveGroup = event.target.closest("[data-save-group]");
+    if (saveGroup) { toggleGroupAnimeInterest(Number(saveGroup.dataset.animeId), saveGroup.dataset.saveGroup); return; }
     const selectGroup = event.target.closest("[data-select-group]");
     if (selectGroup) { activeGroupId = selectGroup.dataset.selectGroup; renderGroups(); return; }
     const addGroupAnime = event.target.closest("[data-group-add-anime]");
