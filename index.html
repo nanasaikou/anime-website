@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#251858" />
+    <title>SoraList — Your anime, beautifully organized</title>
+    <meta
+      name="description"
+      content="Discover anime, build a personal watchlist, track progress, and rate every story you watch."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=26" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <a class="brand" href="#" aria-label="SoraList home">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 28 28"><path d="M7.5 8.1c2.1-2.5 5.1-3.8 8.4-3.2 3.7.7 6.3 4 6.1 7.8-.2 3.1-2.1 5.7-4.7 6.9-3.3 1.5-7.3.5-9.5-2.4C5.8 14.6 5.7 10.7 7.5 8.1Z"/><path d="m7.8 17.1-2.9 5.3 5.8-2.1"/></svg>
+          </span>
+          <span>SoraList</span>
+        </a>
+
+        <nav class="nav-list">
+          <button class="nav-item active" data-view="home">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10Z"/></svg>
+            <span>Home</span>
+          </button>
+          <button class="nav-item" data-view="discover">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.2 8.8-2 4.4-4.4 2 2-4.4 4.4-2Z"/></svg>
+            <span>Discover</span>
+          </button>
+          <button class="nav-item" data-view="list">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z"/><path d="M8 9h8M8 13h8M8 17h5"/></svg>
+            <span>My List</span>
+            <span class="nav-count" id="listCount">0</span>
+          </button>
+          <button class="nav-item" data-view="friends">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3.5 20a5.5 5.5 0 0 1 11 0M14 15.5a4.5 4.5 0 0 1 6.5 4"/></svg>
+            <span>Friends</span>
+            <span class="nav-count" id="friendsCount">0</span>
+          </button>
+          <button class="nav-item" data-view="groups">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4V5Z"/><path d="M8 9h8M8 12h5"/></svg>
+            <span>Group Lists</span>
+            <span class="nav-count" id="groupsCount">0</span>
+          </button>
+          <button class="nav-item" data-view="upcoming">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M6 3v3M18 3v3M4 8h16M5 5h14a1 1 0 0 1 1 1v14H4V6a1 1 0 0 1 1-1Z"/><path d="M8 12h3v3H8z"/></svg>
+            <span>Upcoming</span>
+          </button>
+          <button class="nav-item" data-view="settings">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2.8 2.8-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6v.2h-4V21a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L4.2 17l.1-.1a1.7 1.7 0 0 0 .3-1.9A1.7 1.7 0 0 0 3 14H2.8v-4H3a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L4.2 7 7 4.2l.1.1A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.6v-.2h4V3a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 7l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.2v4H21a1.7 1.7 0 0 0-1.6 1Z"/></svg>
+            <span>Settings</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-spacer"></div>
+
+        <div class="side-promo">
+          <div class="promo-orb">✦</div>
+          <p class="eyebrow">YOUR NEXT STORY</p>
+          <h3>Find something unforgettable.</h3>
+          <button class="text-button" data-view-jump="discover">Explore anime <span>→</span></button>
+        </div>
+
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <button class="mobile-menu" id="mobileMenu" aria-label="Open navigation">
+            <svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          </button>
+          <div class="search-wrap">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            <input id="searchInput" type="search" placeholder="Search anime, genres, studios..." autocomplete="off" />
+            <kbd>/</kbd>
+            <div class="search-results" id="searchResults" hidden></div>
+          </div>
+          <div class="topbar-actions">
+            <button class="sync-status" id="syncStatus" type="button" title="Refresh anime data">
+              <span></span><small id="syncLabel">Syncing…</small>
+            </button>
+            <button class="icon-button" id="themeButton" aria-label="Toggle color theme">
+              <svg class="sun-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+            </button>
+            <div class="topbar-profile-menu">
+              <button class="auth-button" id="authButton" aria-haspopup="menu" aria-expanded="false">Sign in</button>
+              <div class="profile-dropdown" id="profileDropdown" role="menu" hidden>
+                <div class="profile-dropdown-heading"><strong id="profileDropdownName">Your account</strong><small>Choose where to go</small></div>
+                <button type="button" role="menuitem" data-profile-menu-view="profile"><span>☺</span><span><strong>View profile</strong><small>Stats, taste, and friends</small></span></button>
+                <button type="button" role="menuitem" data-profile-menu-view="account"><span>♙</span><span><strong>Account & security</strong><small>Password and personal details</small></span></button>
+                <button type="button" role="menuitem" data-profile-menu-view="settings"><span>⚙</span><span><strong>Settings</strong><small>Appearance and streaming region</small></span></button>
+                <button class="profile-dropdown-signout" id="profileMenuSignOut" type="button" role="menuitem"><span>↪</span><span><strong>Sign out</strong><small>End this local session</small></span></button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section class="view active" id="homeView" data-view-panel="home">
+          <div class="hero" id="hero">
+            <div class="hero-art" aria-hidden="true"></div>
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+              <div class="hero-badge"><span></span> POPULAR THIS SEASON</div>
+              <h1 id="heroTitle">Loading seasonal anime…</h1>
+              <div class="hero-meta" id="heroMeta"><span>LIVE API DATA</span></div>
+              <p id="heroSynopsis">Fetching the latest title, artwork, metadata, and synopsis from the anime API.</p>
+              <div class="hero-actions">
+                <button class="ghost-button" id="heroDetailsButton" disabled>View details</button>
+              </div>
+            </div>
+            <button class="hero-list-toggle" id="heroAddButton" type="button" aria-label="Add featured anime to my list" aria-pressed="false" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+            </button>
+            <div class="hero-pagination" id="heroPagination" aria-label="Featured anime slides"></div>
+          </div>
+
+          <div class="section-heading with-tabs">
+            <div>
+              <p class="eyebrow">DISCOVER</p>
+              <h2>What everyone's watching</h2>
+            </div>
+            <div class="segmented" id="homeTabs">
+              <button class="active" data-feed="trending">Trending</button>
+              <button data-feed="top">Top rated</button>
+            </div>
+            <button class="view-all" data-view-jump="discover">View all <span>→</span></button>
+          </div>
+          <div class="anime-grid" id="homeGrid" aria-live="polite"></div>
+
+          <div class="split-section">
+            <section>
+              <div class="section-heading compact">
+                <div>
+                  <p class="eyebrow">COMING SOON</p>
+                  <h2>Upcoming releases</h2>
+                </div>
+                <button class="view-all" data-view-jump="upcoming">Full calendar <span>→</span></button>
+              </div>
+              <div class="release-list" id="homeUpcoming"></div>
+            </section>
+
+            <aside class="stat-card" id="progressCard">
+              <div class="stat-card-head">
+                <div>
+                  <p class="eyebrow">YOUR PROGRESS</p>
+                  <h3 id="progressTitle">Make this space yours</h3>
+                </div>
+                <span class="mini-avatar" id="progressAvatar">?</span>
+              </div>
+              <p class="muted" id="progressMessage">Sign in to track your watch history and see your stats.</p>
+              <div class="stats-row">
+                <div><strong id="watchingStat">0</strong><span>Watching</span></div>
+                <div><strong id="completedStat">0</strong><span>Completed</span></div>
+                <div><strong id="ratedStat">0</strong><span>Rated</span></div>
+              </div>
+              <button class="outline-button full" id="progressAction">Create your profile</button>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="discoverView" data-view-panel="discover">
+          <div class="page-heading">
+            <div><p class="eyebrow">EXPLORE THE CATALOG</p><h1>Discover anime</h1><p>Stories worth staying up for.</p></div>
+          </div>
+          <section class="discover-filter-panel" aria-label="Discover filters">
+            <div class="filter-panel-heading"><div><p class="eyebrow">REFINE RESULTS</p><h2>Find exactly what you want</h2></div><strong id="discoverResultCount">0 titles</strong></div>
+            <div class="filter-row genre-filter-row" id="genreFilters">
+              <button class="filter-chip active" data-genre="All">All genres</button>
+              <button class="filter-chip" data-genre="Action">Action</button>
+              <button class="filter-chip" data-genre="Adventure">Adventure</button>
+              <button class="filter-chip" data-genre="Comedy">Comedy</button>
+              <button class="filter-chip" data-genre="Drama">Drama</button>
+              <button class="filter-chip" data-genre="Fantasy">Fantasy</button>
+              <button class="filter-chip" data-genre="Mystery">Mystery</button>
+              <button class="filter-chip" data-genre="Romance">Romance</button>
+              <button class="filter-chip" data-genre="Sci-Fi">Sci-Fi</button>
+            </div>
+            <div class="advanced-filter-grid">
+              <label>Format<select data-discover-filter="format"><option value="all">Any format</option><option value="TV">TV series</option><option value="MOVIE">Movie</option><option value="OVA">OVA</option><option value="ONA">ONA</option><option value="SPECIAL">Special</option><option value="MUSIC">Music</option></select></label>
+              <label>Status<select data-discover-filter="status"><option value="all">Any status</option><option value="RELEASING">Currently airing</option><option value="FINISHED">Finished</option><option value="NOT_YET_RELEASED">Upcoming</option></select></label>
+              <label>Season<select data-discover-filter="season"><option value="all">Any season</option><option value="WINTER">Winter</option><option value="SPRING">Spring</option><option value="SUMMER">Summer</option><option value="FALL">Fall</option></select></label>
+              <label>Release year<select id="discoverYear" data-discover-filter="year"><option value="all">Any year</option></select></label>
+              <label>Minimum rating<select data-discover-filter="minScore"><option value="0">Any rating</option><option value="7">7.0+</option><option value="8">8.0+</option><option value="9">9.0+</option></select></label>
+              <label>Sort by<select data-discover-filter="sort"><option value="popular">Most popular</option><option value="rating">Highest rated</option><option value="newest">Newest first</option><option value="title">Title A–Z</option></select></label>
+            </div>
+            <button class="filter-reset" type="button" data-reset-discover>Reset all filters</button>
+          </section>
+          <div class="anime-grid discover-grid" id="discoverGrid"></div>
+        </section>
+
+        <section class="view" id="listView" data-view-panel="list">
+          <div class="page-heading list-heading">
+            <div><p class="eyebrow">YOUR COLLECTION</p><h1>My anime list</h1><p id="listSubtitle">Keep every story in one place.</p></div>
+            <div class="list-summary"><strong id="averageRating">—</strong><span>Average rating</span></div>
+          </div>
+          <div class="segmented list-tabs" id="listTabs">
+            <button class="active" data-status="all">All <span>0</span></button>
+            <button data-status="watching">Watching <span>0</span></button>
+            <button data-status="completed">Completed <span>0</span></button>
+            <button data-status="planned">Plan to watch <span>0</span></button>
+          </div>
+          <div id="sharedListSpotlight"></div>
+          <div class="list-table-wrap" id="listContent"></div>
+        </section>
+
+        <section class="view friends-page" id="friendsView" data-view-panel="friends">
+          <div class="page-heading"><div><p class="eyebrow">WATCH TOGETHER</p><h1>Friends</h1><p>Connect profiles and find the anime you both want to watch.</p></div></div>
+          <div class="friends-tabs" id="friendsTabs" role="tablist" aria-label="Friend categories">
+            <button class="active" type="button" role="tab" aria-selected="true" data-friends-tab="connected">Connected <span id="friendsConnectedCount">0</span></button>
+            <button type="button" role="tab" aria-selected="false" data-friends-tab="pending">Pending <span id="friendsPendingCount">0</span></button>
+            <button type="button" role="tab" aria-selected="false" data-friends-tab="outgoing">Outgoing <span id="friendsOutgoingCount">0</span></button>
+            <button type="button" role="tab" aria-selected="false" data-friends-tab="rejected">Rejected <span id="friendsRejectedCount">0</span></button>
+            <button class="add-friend-tab" type="button" role="tab" aria-selected="false" data-friends-tab="add">Add Friend</button>
+          </div>
+          <section class="friends-tab-panel" data-friends-panel="connected">
+            <div class="section-heading compact"><div><p class="eyebrow">YOUR CIRCLE</p><h2>Connected friends</h2></div></div>
+            <div class="friends-card-grid" id="friendsConnectedList"></div>
+          </section>
+          <section class="friends-tab-panel" data-friends-panel="pending" hidden>
+            <div class="section-heading compact"><div><p class="eyebrow">NEEDS YOUR RESPONSE</p><h2>Pending requests</h2></div><small>Incoming requests</small></div>
+            <div class="friend-request-list" id="friendsPendingList"></div>
+          </section>
+          <section class="friends-tab-panel" data-friends-panel="outgoing" hidden>
+            <div class="section-heading compact"><div><p class="eyebrow">WAITING FOR A RESPONSE</p><h2>Outgoing requests</h2></div><small>Requests you sent</small></div>
+            <div class="friend-request-list" id="friendsOutgoingList"></div>
+          </section>
+          <section class="friends-tab-panel private-friend-section" data-friends-panel="rejected" hidden>
+            <div class="section-heading compact"><div><p class="eyebrow">PRIVATE HISTORY</p><h2>Rejected requests</h2></div><small>Only you can see this section</small></div>
+            <div class="friend-request-list" id="friendsRejectedList"></div>
+          </section>
+          <section class="friends-tab-panel" data-friends-panel="add" hidden>
+            <div class="friend-invite-preview" id="friendInvitePreview" hidden></div>
+            <section class="friend-invite-panel">
+              <div class="friend-invite-icon" aria-hidden="true">+</div>
+              <div><p class="eyebrow">INVITE FRIENDS</p><h2>Share your profile link</h2><p>Anyone with this link can open your profile and send you a friend request.</p></div>
+              <div class="friend-invite-copy"><input id="friendInviteLink" type="text" readonly aria-label="Your friend invite link"><button class="outline-button" id="copyFriendInvite" type="button">Copy link</button></div>
+            </section>
+            <form class="friend-add-panel" id="addFriendForm" novalidate>
+              <div><p class="eyebrow">ADD A FRIEND</p><h2>Find them by username</h2><p>Enter their exact SoraList username to send a friend request.</p></div>
+              <div class="friend-add-controls">
+                <label for="friendUsernameInput">Username</label>
+                <div><input id="friendUsernameInput" name="username" type="text" maxlength="24" autocomplete="off" placeholder="e.g. Luna" aria-describedby="friendAddMessage" required><button class="primary-button" type="submit">Send request</button></div>
+                <p class="friend-add-message" id="friendAddMessage" aria-live="polite"></p>
+              </div>
+            </form>
+            <div class="section-heading compact"><div><p class="eyebrow">FIND PEOPLE</p><h2>Other profiles</h2></div></div>
+            <div class="friends-card-grid" id="friendsDiscoverList"></div>
+          </section>
+        </section>
+
+        <section class="view groups-page" id="groupsView" data-view-panel="groups">
+          <div class="page-heading groups-heading">
+            <div><p class="eyebrow">WATCH TOGETHER</p><h1>Group Lists</h1><p>Build one anime list, see who added each title, and chat with your group.</p></div>
+            <button class="primary-button" id="newGroupButton" type="button">+ Create group</button>
+          </div>
+          <section class="group-create-panel" id="groupCreatePanel" hidden>
+            <div class="group-create-heading"><div><p class="eyebrow">NEW GROUP LIST</p><h2>Create your watch circle</h2><p>Choose connected friends. You will be included automatically.</p></div><button class="modal-close inline" id="cancelGroupCreate" type="button" aria-label="Close group creator">×</button></div>
+            <form id="createGroupForm" class="group-create-form" novalidate>
+              <label>Group name<input name="groupName" maxlength="40" placeholder="Weekend anime club" required></label>
+              <fieldset><legend>Add connected friends</legend><div class="group-member-choices" id="groupMemberChoices"></div></fieldset>
+              <p class="form-error" id="groupCreateError" role="alert"></p>
+              <button class="primary-button" type="submit">Create group list</button>
+            </form>
+          </section>
+          <div class="groups-layout">
+            <aside class="group-rail" aria-label="Your group lists">
+              <div class="group-rail-heading"><strong>Your groups</strong><small id="groupRailMeta">0 groups</small></div>
+              <div class="group-rail-list" id="groupList"></div>
+            </aside>
+            <section class="group-workspace" id="groupWorkspace"></section>
+          </div>
+        </section>
+
+        <section class="view profile-page" id="profileView" data-view-panel="profile">
+          <header class="profile-page-hero">
+            <div class="large-avatar profile-page-avatar" id="profileAvatar">?</div>
+            <div class="profile-page-identity"><p class="eyebrow">YOUR PROFILE</p><h1 id="profileTitle">Guest mode</h1><p class="profile-bio" id="profileBio">Sign in to make this profile yours.</p><p id="profileMeta">Sign in to see your profile.</p></div>
+          </header>
+          <div class="profile-stats-grid">
+            <article><strong id="profileTitlesStat">0</strong><span>Titles saved</span></article>
+            <article><strong id="profileEpisodesStat">0</strong><span>Episodes watched</span></article>
+            <article><strong id="profileWatchingStat">0</strong><span>Currently watching</span></article>
+            <article><strong id="profileCompletedStat">0</strong><span>Completed</span></article>
+            <article><strong id="profilePlannedStat">0</strong><span>Plan to watch</span></article>
+            <article><strong id="profileRatingStat">—</strong><span>Average rating</span></article>
+            <article><strong id="profileSharedStat">0</strong><span>Shared picks</span></article>
+          </div>
+          <div class="profile-content-grid">
+            <section class="profile-detail-panel">
+              <div class="profile-panel-heading"><div><p class="eyebrow">YOUR TASTE</p><h2>Favorite genres</h2></div><small>Based on your saved anime</small></div>
+              <div class="profile-genre-list" id="profileGenreList"></div>
+              <div class="profile-subsection"><h3>Favorite studios</h3><div class="profile-genre-list" id="profileStudioList"></div></div>
+            </section>
+            <section class="friend-panel" id="friendPanel" hidden>
+              <div class="friend-panel-heading"><div><p class="eyebrow">FRIENDS</p><h3>Watch together</h3></div><small id="friendPanelMeta"></small></div>
+              <div class="friend-list" id="friendList"></div>
+            </section>
+            <section class="profile-detail-panel">
+              <div class="profile-panel-heading"><div><p class="eyebrow">WATCH HISTORY</p><h2>List breakdown</h2></div><small id="profileRatedCount">0 rated titles</small></div>
+              <div class="profile-status-breakdown" id="profileStatusBreakdown"></div>
+            </section>
+          </div>
+          <section class="profile-detail-panel profile-recent-panel">
+            <div class="profile-panel-heading"><div><p class="eyebrow">RECENTLY SAVED</p><h2>Your latest anime</h2></div><button class="view-all" data-view-jump="list">Open full list <span>→</span></button></div>
+            <div class="profile-recent-list" id="profileRecentList"></div>
+          </section>
+        </section>
+
+        <section class="view account-page" id="accountView" data-view-panel="account">
+          <div class="page-heading"><div><p class="eyebrow">PRIVATE ACCOUNT</p><h1>Account</h1><p>Manage personal information, sign-in methods, and account security.</p></div></div>
+          <header class="account-page-hero">
+            <div class="large-avatar account-page-avatar" id="accountPageAvatar">?</div>
+            <div><p class="eyebrow">SIGNED IN AS</p><h2 id="accountPageName">Guest mode</h2><p id="accountPageEmail">No email available</p><span id="accountPageProvider">Local account</span></div>
+            <button class="outline-button" id="profileSignOutButton">Sign out</button>
+          </header>
+          <section class="profile-detail-panel account-details-panel">
+            <div class="profile-panel-heading"><div><p class="eyebrow">PERSONAL INFORMATION</p><h2>Account details</h2></div><small>Visible only to you on this device</small></div>
+            <dl class="profile-account-details" id="profileAccountDetails"></dl>
+          </section>
+          <section class="profile-detail-panel profile-edit-panel">
+            <div class="profile-panel-heading"><div><p class="eyebrow">CUSTOMIZE</p><h2>Edit profile</h2></div><small>Your username must stay unique</small></div>
+            <form class="edit-profile-form" id="editProfileForm">
+              <label>Unique username<input name="username" autocomplete="username" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" required><small>3–20 letters, numbers, or underscores.</small></label>
+              <label>Location<input name="location" autocomplete="country-name" maxlength="50" placeholder="Where are you watching from?"></label>
+              <label class="edit-profile-wide">Bio<textarea name="bio" maxlength="160" rows="3" placeholder="Tell your friends about your anime taste."></textarea><small><span id="profileBioCount">0</span>/160 characters</small></label>
+              <div class="edit-profile-wide profile-avatar-editor">
+                <span class="edit-profile-label">Profile picture</span>
+                <div class="profile-avatar-upload-row">
+                  <div class="avatar profile-avatar-preview" id="profileAvatarPreview">?</div>
+                  <div class="profile-avatar-dropzone" id="profileAvatarDropZone" role="button" tabindex="0" aria-label="Upload or drop a profile picture">
+                    <input id="profileAvatarFile" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+                    <strong id="profileAvatarDropText">Drag and drop an image here</strong>
+                    <small>PNG, JPG, or WebP up to 8 MB</small>
+                    <button class="outline-button" type="button" id="chooseProfileAvatar">Choose image</button>
+                  </div>
+                  <button class="text-button profile-avatar-remove" type="button" id="removeProfileAvatar">Remove</button>
+                </div>
+              </div>
+              <label class="edit-profile-wide">Or use an image URL<input name="avatarUrl" type="url" inputmode="url" placeholder="https://example.com/avatar.jpg"><small>Optional. Only HTTPS images are accepted.</small></label>
+              <p class="form-error edit-profile-wide" id="editProfileError" role="alert"></p>
+              <div class="edit-profile-actions edit-profile-wide"><button class="primary-button" type="submit">Save profile</button><button class="outline-button" type="button" id="resetProfileForm">Discard changes</button></div>
+            </form>
+          </section>
+          <section class="profile-detail-panel profile-security-panel">
+            <div class="profile-panel-heading"><div><p class="eyebrow">SECURITY</p><h2>Security & authentication</h2></div><small>Passwords are salted and one-way hashed</small></div>
+            <div class="profile-security-grid">
+              <form class="security-card security-password-form" id="changePasswordForm">
+                <div><h3 id="securityPasswordTitle">Change password</h3><p id="securityPasswordHint">Use a strong password you do not reuse elsewhere.</p></div>
+                <label id="securityCurrentPasswordField">Current password<input name="currentPassword" type="password" autocomplete="current-password"></label>
+                <label>New password<input name="newPassword" type="password" autocomplete="new-password" minlength="10" required><small>At least 10 characters.</small></label>
+                <label>Confirm new password<input name="confirmPassword" type="password" autocomplete="new-password" minlength="10" required></label>
+                <p class="form-error" id="changePasswordError" role="alert"></p>
+                <button class="primary-button" id="changePasswordButton" type="submit">Update password</button>
+              </form>
+              <section class="security-card">
+                <div><h3>Password recovery</h3><p>Generate a one-time recovery code and keep it somewhere private. SoraList cannot display it again.</p></div>
+                <div class="recovery-status" id="recoveryStatus">No recovery code generated</div>
+                <div class="recovery-code" id="recoveryCodeDisplay" hidden><code id="recoveryCodeValue"></code><button class="outline-button" id="copyRecoveryCode" type="button">Copy</button></div>
+                <button class="outline-button" id="generateRecoveryCode" type="button">Generate recovery code</button>
+              </section>
+              <section class="security-card security-connections-card">
+                <div><h3>Connected sign-in methods</h3><p>Link Google or Discord so you have another way to access this profile.</p></div>
+                <div class="security-provider-list" id="securityProviderList"></div>
+              </section>
+              <section class="security-card security-note-card">
+                <div><h3>How your password is protected</h3><p>Passwords and recovery codes are never stored as readable text. They use a unique random salt and PBKDF2-HMAC-SHA-256 with 600,000 iterations.</p></div>
+                <span class="security-badge">Web Crypto protected</span>
+              </section>
+            </div>
+          </section>
+        </section>
+
+        <section class="view settings-page" id="settingsView" data-view-panel="settings">
+          <div class="page-heading"><div><p class="eyebrow">PREFERENCES</p><h1>Settings</h1><p>Make SoraList feel comfortable for you.</p></div></div>
+          <div class="settings-grid">
+            <section class="settings-panel">
+              <div class="settings-panel-heading"><span>◐</span><div><h2>Appearance</h2><p>Choose how the interface looks and feels.</p></div></div>
+              <div class="settings-field"><span>Color theme<small>Switch between light and dark widgets.</small></span><div class="settings-choice-group" id="settingsTheme" role="group" aria-label="Color theme"><button type="button" data-settings-theme="light">Light</button><button type="button" data-settings-theme="dark">Dark</button></div></div>
+              <div class="settings-field"><span>Card density<small>Change how much anime fits on screen.</small></span><div class="settings-choice-group" id="settingsDensity" role="group" aria-label="Card density"><button type="button" data-settings-density="comfortable">Comfortable</button><button type="button" data-settings-density="compact">Compact</button></div></div>
+              <label class="settings-field"><span>Always show list buttons<small>Keep every plus or tick visible without hovering.</small></span><input id="settingsAlwaysShowControls" type="checkbox" role="switch"></label>
+              <label class="settings-field"><span>Reduce motion<small>Disable interface movement and transitions.</small></span><input id="settingsReduceMotion" type="checkbox" role="switch"></label>
+            </section>
+            <section class="settings-panel">
+              <div class="settings-panel-heading"><span>◎</span><div><h2>Streaming region</h2><p>Choose which regional services appear on anime details.</p></div></div>
+              <label class="settings-field stacked"><span>Default region<small>Regions are loaded live from TMDB.</small></span><select id="settingsRegion" aria-label="Default streaming region"><option value="">Loading regions…</option></select></label>
+              <p class="settings-note" id="settingsRegionNote">Your selected region is used for every provider lookup.</p>
+            </section>
+            <section class="settings-panel">
+              <div class="settings-panel-heading"><span>↻</span><div><h2>Live catalog</h2><p>Anime data refreshes automatically every 30 minutes.</p></div></div>
+              <div class="settings-action-row"><span><strong id="settingsSyncState">Checking status…</strong><small>AniList with Jikan fallback</small></span><button class="outline-button" id="settingsRefreshButton">Refresh now</button></div>
+            </section>
+            <section class="settings-panel">
+              <div class="settings-panel-heading"><span>☺</span><div><h2>Account</h2><p>Manage personal details, passwords, and connected sign-ins.</p></div></div>
+              <div class="settings-action-row"><span><strong id="settingsAccountName">Guest mode</strong><small id="settingsAccountType">Sign in to save preferences</small></span><button class="outline-button" id="settingsProfileButton">Manage account</button></div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="upcomingView" data-view-panel="upcoming">
+          <div class="page-heading calendar-heading">
+            <div><p class="eyebrow">RELEASE RADAR</p><h1>Upcoming anime</h1><p>The next stories landing on your screen.</p></div>
+            <div class="season-pill"><span>✦</span><div><small>CURRENT SEASON</small><strong id="seasonLabel">Loading…</strong></div></div>
+          </div>
+          <div class="upcoming-feature" id="upcomingFeature"></div>
+          <div class="section-heading compact"><div><p class="eyebrow">ON THE HORIZON</p><h2>Season lineup</h2></div></div>
+          <div class="upcoming-grid" id="upcomingGrid"></div>
+        </section>
+      </main>
+    </div>
+
+    <div class="scrim" id="mobileScrim" hidden></div>
+
+    <div class="modal-backdrop" id="authModal" hidden>
+      <section class="modal auth-modal" role="dialog" aria-modal="true" aria-labelledby="authTitle">
+        <button class="modal-close" data-close-modal="authModal" aria-label="Close">×</button>
+        <div class="auth-brand">
+          <span class="brand-mark"><svg viewBox="0 0 28 28"><path d="M7.5 8.1c2.1-2.5 5.1-3.8 8.4-3.2 3.7.7 6.3 4 6.1 7.8-.2 3.1-2.1 5.7-4.7 6.9-3.3 1.5-7.3.5-9.5-2.4C5.8 14.6 5.7 10.7 7.5 8.1Z"/><path d="m7.8 17.1-2.9 5.3 5.8-2.1"/></svg></span>
+          <span>SoraList</span>
+        </div>
+        <div class="auth-tabs" id="authTabs">
+          <button class="active" data-auth-view="signin">Sign in</button>
+          <button data-auth-view="signup">Create account</button>
+        </div>
+        <div class="social-auth" aria-label="Social sign-in options">
+          <button class="social-auth-button google" type="button" data-oauth-provider="google"><span class="social-provider-mark">G</span><strong>Continue with Google</strong></button>
+          <button class="social-auth-button discord" type="button" data-oauth-provider="discord"><span class="social-provider-mark">◉</span><strong>Continue with Discord</strong></button>
+        </div>
+        <div class="auth-divider"><span>or use your email</span></div>
+        <form id="signinForm" class="auth-form">
+          <div class="form-heading"><h2 id="authTitle">Welcome back</h2><p>Your list has been waiting for you.</p></div>
+          <label>Email<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required /></label>
+          <label>Password<input name="password" type="password" autocomplete="current-password" placeholder="••••••••" minlength="6" required /></label>
+          <p class="form-error" id="signinError" role="alert"></p>
+          <button class="primary-button full" type="submit">Sign in</button>
+          <button class="auth-text-action" id="showPasswordReset" type="button">Forgot your password?</button>
+        </form>
+        <form id="signupForm" class="auth-form" hidden>
+          <div class="form-heading"><h2>Create your profile</h2><p>Pick a name that is uniquely yours.</p></div>
+          <label>Unique username<input name="username" autocomplete="username" placeholder="e.g. moonlitotaku" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" required /><small>3–20 characters. Letters, numbers, and underscores only.</small></label>
+          <label>Email<input name="email" type="email" autocomplete="email" placeholder="you@example.com" required /></label>
+          <label>Password<input name="password" type="password" autocomplete="new-password" placeholder="At least 10 characters" minlength="10" required /></label>
+          <p class="form-error" id="signupError" role="alert"></p>
+          <button class="primary-button full" type="submit">Create account</button>
+        </form>
+        <form id="resetPasswordForm" class="auth-form" hidden>
+          <div class="form-heading"><h2>Reset password</h2><p>We will email you a secure password-reset link.</p></div>
+          <label>Email<input name="email" type="email" autocomplete="email" required /></label>
+          <p class="form-error" id="resetPasswordError" role="alert"></p>
+          <button class="primary-button full" type="submit">Send reset link</button>
+          <button class="auth-text-action" id="backToSignIn" type="button">Back to sign in</button>
+        </form>
+        <p class="auth-footnote">Authentication and shared lists are protected by Supabase Auth and database row-level security.</p>
+      </section>
+    </div>
+
+    <div class="modal-backdrop" id="detailModal" hidden>
+      <section class="modal detail-modal" role="dialog" aria-modal="true" aria-labelledby="detailTitle">
+        <button class="modal-close light" data-close-modal="detailModal" aria-label="Close">×</button>
+        <div id="detailContent"></div>
+      </section>
+    </div>
+
+    <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-adapter.js?v=1"></script>
+    <script src="app.js?v=40"></script>
+  </body>
+</html>

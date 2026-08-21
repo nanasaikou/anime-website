@@ -1,0 +1,11 @@
+{
+  "name": "soralist",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env server.mjs",
+    "start": "node --env-file-if-exists=.env server.mjs",
+    "check": "node --check app.js && node --check supabase-adapter.js && node --check server.mjs && node tests/date.test.mjs && node tests/availability.test.mjs && node tests/franchise.test.mjs && node tests/title-family.test.mjs && node tests/regional-providers.test.mjs && node tests/collaboration.test.mjs && node tests/friends-page.test.mjs && node tests/friend-requests.test.mjs && node tests/friend-invite.test.mjs && node tests/group-lists.test.mjs && node tests/oauth.test.mjs && node tests/auth-security.test.mjs && node tests/discover-filters.test.mjs && node tests/progress-status.test.mjs && node tests/list-toggle-ui.test.mjs && node tests/list-navigation.test.mjs && node tests/profile-page.test.mjs && node tests/account-page.test.mjs && node tests/settings-page.test.mjs"
+  }
+}
